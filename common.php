@@ -100,6 +100,7 @@ function print_sidebar() {
 	echo "<a href='index.php'>Home page</a>";
 	echo "<a href='explore_db.php'>Explore databases</a>";
 	echo "<a href='createdb.php'>Create database</a>";
+	echo "<a href='upload_db.php'>Upload database</a>";
 	echo "<a href='search.php'>Search databases</a>";
 	echo "<a href='direct_access.php'>Genomic islands</a>";
 	echo "<a href='help_pages.php'>Help page</a>";

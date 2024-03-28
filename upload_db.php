@@ -29,7 +29,7 @@ print_header("upload");
 <div id="content">
 <div class="centered_box">
 <h2><?php site_name(); ?> database upload</h2>
-<p>This page helps to upload <?php site_name(); ?> database (in sqlite3 format) to this website.</p>
+<p>Use this page to upload a <?php site_name(); ?> database (in sqlite3 format) to this website.</p>
 <?php
 
 if (isset($_GET["id"])) {
