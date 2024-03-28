@@ -31,6 +31,7 @@
 					<div class='index_box'>
 						<!--<img src='css/Synteruptor_logo_full.png' id='logo' alt='logo' />-->
 						<p><?php echo $site_name ?> is a tool designed to find synteny breaks between closely related bacterial genomes. The breaks found can be explored with this web interface to find clusters of genes of interest.</p>
+						<p>DOI on BioRxiv: <a href="https://www.biorxiv.org/content/10.1101/2024.01.03.573040v1">10.1101/2024.01.03.573040v1</a></p>
 						<br /><span id="last_update">Last update: <?php echo get_setting("last_update"); ?></span>
 						<br /><span id="contact">Contact: <?php echo get_mail(); ?></span>
 						<span style="float:right;"><a href="download.php">Download <?php echo $site_name ?></a></span>

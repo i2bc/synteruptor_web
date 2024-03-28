@@ -182,12 +182,9 @@ function create_table(pars) {
 		// Also get all the genomes orthologs numbers
 		pars.type = 'genomes_ortho';
 		loading_on();
-		console.log(pars);
-		console.log(urls.get_data);
 		$.getJSON( urls.get_data, pars, function(orthos) {
 			loading_off();
 			data.num_ortho = orthos.num_ortho;
-			console.log(data);
 			links_table(data);
 		});
 	});
@@ -198,7 +195,6 @@ $(function() {
 	// Init the parameters
 	pars = get_url_parameters();
 	set_pars( pars );
-	console.log( get_pars() );
 	if (get_par("version") && get_par("version") != "") {
 		create_table(pars);
 	} else {

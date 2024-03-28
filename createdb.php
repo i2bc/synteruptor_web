@@ -30,9 +30,10 @@ print_header("upload");
 <div id="content">
 <div class="centered_box">
 <h2><?php site_name(); ?> database creator</h2>
-<p>This page helps to create a <?php site_name(); ?> database (in sqlite3 format) based on genomes uploaded by the user.</p>
-<p> The final database can be downloaded for local analyzis, or it can be explored on the <?php site_name(); ?> site.</p>
-<p>Alternatively you can <a href="upload_db.php">upload a Synteruptor database</a> directly if you have generated a database yourself.</p>
+<p>Use this page to create a <?php site_name(); ?> database (in sqlite3 format) based on uploaded genomes.</p>
+<p> The final database can be downloaded for local analyzis, or it can be explored on the <?php site_name(); ?> web site.</p>
+<p>Alternatively you can <a href="upload_db.php">upload a <?php site_name(); ?> database</a> directly if you have already generated a database yourself.</p>
+
 <?php
 
 if (isset($_GET["id"])) {
@@ -57,7 +58,9 @@ if (isset($_GET["id"])) {
 		echo "</div>";
 		echo "<div class='button_container'><a href='createdb_start.php'><div class='button_link'>Start a new project</div></a></div>";
 		exit;
-	}
+	}else{
+		if(!in_array($id,$_SESSION["db_ids"])){$_SESSION["db_ids"][]=$id;};
+	};
 
 	# List the genome files in the dir
 	$gbks = scan_gbks();
@@ -66,6 +69,7 @@ if (isset($_GET["id"])) {
 	echo "<ol>";
 	print_gbks($gbks);
 	$config = get_config();
+
 	if ($ngbks < $max_gbks && (!isset($config) || $config['status'] == 'preparation')) {
 		$diff = $max_gbks - $ngbks;
 		echo '<form id="uploader" action="createdb_add.php?id=' . $id . '" method="post" enctype="multipart/form-data">';
@@ -86,7 +90,7 @@ if (isset($_GET["id"])) {
 	echo '<div class="infobox">';
 	echo '<h3>Information about the data provided and generated</h3>';
 	echo "<ul>";
-	echo "<li>The job will send you an e-mail (mandatory) when the database creation starts and when it ends. You can also check the progress by bookmarking this page: <a href='$builder?id=$id'>$site_name job: $id</a>.</li>";
+	echo "<li>The job will send you an e-mail (if provided) when the database creation starts and when it ends. You can also check the progress on this page: <a href='$builder?id=$id'>$site_name job: $id</a> (if you didn't provide your email address, we strongly recommend that bookmark this page).</li>";
 	echo "<li>The mail provided will only be used to send the progress information.</li>";
 	echo "<li>The files uploaded will be conserved until the database has been built, and they will then be deleted from our servers.</li>";
 	echo "<li>The created database is not made public and can only be accessed with the random id created for it ($id).</li>";
@@ -97,6 +101,8 @@ if (isset($_GET["id"])) {
 } else {
 	echo "<div class='button_container'><a href='createdb_start.php'><div class='button_link'>Start a new project</div></a></div>";
 }
+
+
 ?>
 </div>
 </div>

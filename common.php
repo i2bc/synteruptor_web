@@ -67,6 +67,7 @@ function print_header($type=null, $name=null) {
 
 function print_nav($type=null, $name=null) {
 	$dir = '.';
+	$sep = "&nbsp;> ";
 	echo "<div id='entete_links'>";
 	if ($type == 'viewer' || $type == 'aligner') {
 		# If the database is given
@@ -96,13 +97,13 @@ function print_sidebar() {
 	echo "<span class='mynav-logo-banner'>";
 	echo "<a href='$dir' style='padding: 1px; text-align: center;'><img src='" . "css/logo_bioi2_no_title_s.png" . "' alt='logo_bioi2' id='bioi2_menu_logo'/></a>";
 	// echo "<br>";
+	echo "<a href='index.php'>Home page</a>";
 	echo "<a href='explore_db.php'>Explore databases</a>";
 	echo "<a href='createdb.php'>Create database</a>";
 	echo "<a href='search.php'>Search databases</a>";
 	echo "<a href='direct_access.php'>Genomic islands</a>";
 	echo "<a href='help_pages.php'>Help page</a>";
 	echo "<a href='contact.php'>Contact us</a>";
-	echo "<a href='index.php'>Back to home page</a>";
 	echo "</span>";
 	echo "</div>";
 }

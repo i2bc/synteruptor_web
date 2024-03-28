@@ -28,6 +28,6 @@
         $queue = get_setting("search_queue");
         $ncpus = "1";
     }
-    echo shell_exec("echo sudo /home/scripts/run_job_as -u $userid -c 'qsub -N $id -q $queue -o $parent_dir/$id/$id.log -j oe -S /bin/sh -l ncpus=$ncpus -l walltime=$walltime -l mem=$mem -- $script_dir/$run_script -i $parent_dir/$id' > $parent_dir/$id/tmp.sh");
+    echo shell_exec("echo qsub -N $id -q $queue -o $parent_dir/$id/$id.log -j oe -S /bin/sh -l ncpus=$ncpus -l walltime=$walltime -l mem=$mem -- $script_dir/$run_script -i $parent_dir/$id > $parent_dir/$id/tmp.sh");
     $output = shell_exec("sudo /home/scripts/run_job_as -u $userid -c 'qsub -N $id -q $queue -o $parent_dir/$id/$id.log -j oe -S /bin/sh -l ncpus=$ncpus -l walltime=$walltime -l mem=$mem -- $script_dir/$run_script -i $parent_dir/$id'");
 ?>

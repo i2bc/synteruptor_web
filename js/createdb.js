@@ -6,12 +6,8 @@ function status_checker(id) {
 		"id": id,
 		"command": "check",
 	};
-	console.log(pars);
 	// Check the status a first time to see if the building is already started/finished
-	console.log(format_url( urls.stat, pars ));
 	$.getJSON( urls.stat, pars, function( config ) {
-		console.log(config);
-		console.log(config.status);
 		if (config.status == 'preparation') {
 			start_button(id);
 		} else {
@@ -22,50 +18,48 @@ function status_checker(id) {
 
 function start_button(id) {
 
-	console.log("Start button created");
 	$form = $("<form id='mailform' style='text-align:left;' />");
 	$btol = $("<span><label for='btol'>Blocks tolerance: </label><input type='num' name='btol' class='btol' value=2 min=0 max=5 style='width:3em' /> genes gap allowed between pairs of orthologs in blocks (strict: 0)</span>");
 	$form
 		.append("<span>Finalization:</span><br>")
 		.append($btol)
 		.append("<br>")
-		.append( $("<label for='mail'>Mail: </label><input type='text' class='mail' name='mail' class='mail' placeholder='E-mail address required to get results' style='width:30em' />") )
+		.append( $("<label for='mail'>Mail: </label><input type='text' class='mail' name='mail' class='mail' placeholder='E-mail address to get results (optional)' style='width:30em' />") )
 		.append( $("<br /><label for='author'>Author: </label><input type='text' class='author' name='author' class='author' placeholder='Author name(s) (optional)' style='width:30em' />") )
 		.append( $("<br /><label for='description'>Description: </label><input type='text' class='description' name='description' class='description' placeholder='Description (optional)' style='width:30em' />") );
 	$form.append("<br>");
 	$button = $("<button type='submit' />")
 		.text("Start building the database with these genomes");
 	$form.append($button);
-	
-	/*
-	$form.on("submit", function(e) {
-		console.log("Submit");
-		e.preventDefault();
-		$(this).attr("disabled", "disabled");
-		validator.form();
-		start(id);
-	});
-	*/
+
 	$("#building").append($form);
+
 	validator = $( "#mailform" ).validate({
 		rules: {
 			mail: {
-				required: true,
+				required: false,
 				email: true
+			},
+			description: {
+				required: false
+			},
+			author: {
+				required: false
+			},
+			btol: {
+				required: true
 			}
 		},
 		submitHandler: function(form) {
 			$(this).attr("disabled", "disabled");
 			start(id);
 		}
-		       
 	});
 }
 
 function run_qsub(id) {
 	// run send_qsub.php to submit job to cluster
 	var qsub_url = format_url( urls.qsub, { 'id': id, 'run_script': "run_migenis.sh" } );
-	console.log(qsub_url);
 	$.ajax({
 		url : qsub_url
 	 }).done(function(data){
@@ -84,8 +78,8 @@ function start(id) {
 	pars.btol = $(".btol").val();
 	$("#addmore").closest("li").remove();
 	$("#uploader").remove();
-	run_qsub(id); // inspired by adeneo's comment, https://stackoverflow.com/questions/16941138/jquery-button-onclick-run-system-command
 	$.get( urls.stat, pars, function( stat ) {
+		run_qsub(id); // inspired by adeneo's comment, https://stackoverflow.com/questions/16941138/jquery-button-onclick-run-system-command
 		continuous_check(id);
 	});
 }
@@ -93,7 +87,6 @@ function start(id) {
 function continuous_check(id) {
 	$("#addmore").closest("li").remove();
 	$("#uploader").remove();
-	console.log("Continuous check for " + id);
 	var pars = {
 		"id": id,
 		"command": "check",
@@ -126,8 +119,8 @@ function finish(id) {
 	// $list.append( $( "<li />" ).append(summary) );
 	$("#building").empty()
 		.append( $("<p />").text("The database is ready:") )
-		.append( summary );
-	console.log("Check over");
+		.append( summary )
+		.append( $("<p />").text("/!\\ note that user databases older than 30 days are automatically wiped!"));
 }
 
 jQuery(function() {

@@ -30,25 +30,18 @@ function blast_ncbi_redirect( gene ) {
 		'QUERY': encodeURIComponent( get_fasta( gene ) )
 	};
 	var final_url = format_url( url_origin, commands );
-	console.log( final_url );
 	window.location.replace( final_url );
 }
 
 function blast_db_redirect( gene, db ) {
-	console.log(gene);
 	var data = {
 		'db': db,
 		'seq': encodeURIComponent( get_fasta( gene ) )
 	};
-	console.log(data);
-	console.log(urls.start_search);
 	$.post( urls.start_search, data, function(d) {
-		console.log("Successful");
-		console.log(d);
 		if (d.status == 'success' && d.id && urls.search) {
 			var pars = { 'id': d.id };
 			var final_url = format_url( urls.search, pars );
-			console.log( final_url );
 			setTimeout(function() {
 				window.location = final_url;
 			}, 1000);
@@ -65,7 +58,6 @@ function blast_db_redirect( gene, db ) {
 jQuery(function() {
 	// Retrieve the data
 	var pars = get_url_parameters();
-	console.log( pars );
 	
 	if (pars.pid) {
 		pars.type = 'gene';
@@ -75,7 +67,6 @@ jQuery(function() {
 		console.log("Error: no type");
 		return;
 	}
-	console.log( format_url(urls.get_data, pars) );
 	$.getJSON( urls.get_data, pars, function( gene ) {
 		$('#waiting').hide();
 		if ( gene.outcome === false ) {
@@ -89,11 +80,9 @@ jQuery(function() {
 				if ( pars.blast == 'ncbi') {
 					blast_ncbi_redirect( gene );
 				} else if ( pars.blast == 'db' ) {
-					console.log("Redirect to blast_db");
 					blast_db_redirect( gene, pars.version );
 				}
 			} else if (pars.breakid) {
-				console.log(gene);
 				var fasta_list = html_fasta_list( gene.break_genes );
 				$("#fasta").html(fasta_list);
        			} else if (pars.pid) {
@@ -103,7 +92,6 @@ jQuery(function() {
 		}
 	}).fail(function() {
 		console.log("Query failed");
-		console.log( urls.get_data + "?" + $.param(pars) );
 	});
 });
 

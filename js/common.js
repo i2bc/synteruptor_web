@@ -36,7 +36,6 @@ function set_par( key, val ) {
 		}
 	} else {
 		console.log( "Error: parameter key " + key + " with value " + val + " is not defined" );
-		console.log( get_pars() );
 		return null;
 	}
 }
@@ -46,7 +45,6 @@ function get_par( key ) {
 		return cur_pars[ key ];
 	} else {
 		console.log( "Error: parameter key " + key + " is not defined" );
-		console.log( get_pars() );
 		return null;
 	}
 }
@@ -138,7 +136,6 @@ function set_backtop() {
 		$(window).on('scroll', toggle_backtop);
 		$("#backtop").on('click', function(e) {
 			e.preventDefault();
-			console.log("Back to top?");
 			$('html,body').animate({ scrollTop: 0 }, 'fast');
 		});
 	}

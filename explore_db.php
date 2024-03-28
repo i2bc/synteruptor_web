@@ -9,7 +9,7 @@
         ?>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title><?php site_name(); ?> help pages</title>
+		<title><?php site_name(); ?> database exploration</title>
 		<link rel="icon" type="image/png" href="css/Synteruptor_logo_square.png">
 		<link rel="stylesheet" type="text/css" href="css/common.css">
 		<script type="text/javascript" src="js/jquery/jquery-1.12.min.js"></script>
@@ -17,6 +17,7 @@
 		<script type="text/javascript" src="js/index.js"></script>
 
 	</head>
+	
 	<nav>
 		<?php
 			print_sidebar();
@@ -26,15 +27,16 @@
 		<?php
 			print_header();
 		?>
+
 		<div id="content">
 			<div class="centered_box">
 				<h2>Available databases</h2>
                 <div class='index_box'>
                 <?php
                     // Display public databases (if any)
-                    $allowed = get_available_dbs_list();
+                    $allowed = get_available_dbs_list("dbs");
                     if ($allowed) {
-                        echo "<p>The following databases were generated with preselected genomes and can be freely explored:</p>";
+                        echo "<p>The following databases were generated with preselected genomes and can be freely explored (they might take a few seconds to load):</p>";
                         echo "<div id='databases'></div>";
                     } else {
                         echo "<p>No public database available</p>";
@@ -47,25 +49,60 @@
 				<h2>User databases</h2>
                 <div class='index_box'>
                 <?php
-					$available_dbs = get_available_dbs_list(true, $_SESSION['db_ids']);
+
+					// Check what user DBs are still available and list only those
+					$available_dbs = get_available_dbs_list("user", $_SESSION['db_ids']);
 					foreach ($_SESSION['db_ids'] as $key => $value){
 						if(!in_array($value.".sqlite",$available_dbs)){
+							console_log("removing".$value);
 							unset($_SESSION['db_ids'][$key]);
 						}
 					}
-					if (empty($_SESSION['db_ids'])){
-						echo "<p>No user databases found in web browser history</p>";
+					if (empty($available_dbs)){
+						echo "<p>No user databases found in web browser cache (/!\ note that jobs older than 30 days are automatically wiped)...</p>";
 					}else{
-						echo "<p>The following databases were generated:</p>";
-						foreach ($_SESSION['db_ids'] as &$value){
-							$site_host = get_setting('site_host');
-							$site_host_subdir = get_setting('site_host_subdir');
-							echo "<p><a href='$site_host/$site_host_subdir/summary.php?version=$value'>$value</a></p>";
-						}
+						echo "<p>The following databases were found in your web cache:</p>";
+                        echo "<div id='userdatabases'></div>";
+						echo "<p>/!\ note that jobs older than 30 days are automatically wiped.</p>";
+
+						// foreach ($_SESSION['db_ids'] as &$value){
+						// 	$site_host = get_setting('site_host');
+						// 	$site_host_subdir = get_setting('site_host_subdir');
+						// 	echo "<p><a href='$site_host/$site_host_subdir/summary.php?version=$value'>$value</a></p>";
+						// }
 					}
                 ?>
                 </div>
 			</div>
+			<div class="centered_box">
+				<h2>User searches</h2>
+                <div class='index_box'>
+                <?php
+
+					// // Check what user DBs are still available and list only those
+					// $available_dbs = get_available_dbs_list("user", $_SESSION['db_ids']);
+					// foreach ($_SESSION['blast_ids'] as $key => $value){
+					// 	if(!in_array($value.".sqlite",$available_dbs)){
+					// 		console_log("removing".$value);
+					// 		unset($_SESSION['db_ids'][$key]);
+					// 	}
+					// }
+					if (empty($_SESSION['blast_ids'])){
+						echo "<p>No user searches found in web browser cache (/!\ note that jobs older than 30 days are automatically wiped)...</p>";
+					}else{
+						echo "<p>The following user searches were found in your web cache:</p>";
+						
+						foreach ($_SESSION['blast_ids'] as &$value){
+							$site_host = get_setting('site_host');
+							$site_host_subdir = get_setting('site_host_subdir');
+							echo "<p><a href='$site_host/$site_host_subdir/search.php?id=$value'>$value</a></p>";
+						}
+						echo "<p>/!\ note that jobs older than 30 days are automatically wiped.</p>";
+					}
+                ?>
+                </div>
+			</div>
+
 		</div>
 	</body>
 </html>

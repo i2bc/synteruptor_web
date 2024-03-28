@@ -10,7 +10,6 @@ function status_checker(id) {
 		
 		// Check the status a first time to see if the building is already started/finished
 		$.getJSON( urls.stat, pars, function( stat ) {
-			console.log("Current status: " + stat.status);
 			if (stat.status == 'nostatus') {
 				// Do nothing: waiting for the form to be submitted
 			} else {
@@ -21,7 +20,6 @@ function status_checker(id) {
 }
 
 function start_button(id) {
-	console.log("Start button created");
 	$button = $("<button type='button' />")
 		.text("Search")
 		.on("click", function(e) {
@@ -43,7 +41,6 @@ function start(id) {
 }
 
 function continuous_check(id) {
-	console.log("Continuous check for " + id);
 	var pars = {
 		"id": id,
 		"command": "check",
@@ -88,7 +85,6 @@ function finish(id) {
 	};
 	// Ask the API to give the result in JSON
 	$.getJSON( urls.stat, pars, function( data ) {
-		console.log(data);
 		if (Object.keys(data.hits).length > 0) {
 			$("#results").empty();
 			
@@ -111,7 +107,6 @@ function finish(id) {
 				
 				for ( g in data.hits[q] ) {
 					var hit = data.hits[q][g];
-					console.log(hit);
 					
 					var breaks = [];
 					var brlist = hit.breaks;
@@ -132,6 +127,10 @@ function finish(id) {
 					$table.append($l);
 				}
 			}
+			$("#results_table")
+			.append( $("<p />")
+			.text("/!\\ note that user searches older than 30 days are automatically wiped!") );
+
 		} else {
 			$("#results").empty()
 				.append("No match found for the query '" + data.query + "' in the <a href='" + urls.summary + "?version=" + data.version + "'>" + data.version + " database</a>.");
@@ -140,7 +139,6 @@ function finish(id) {
 		var $redo = $( "<p><a href='" + redo_url + "'>Start another search</a></p>" );
 		$( "#results" ).append($redo);
 	});
-	console.log("Check over");
 }
 
 jQuery(function() {
