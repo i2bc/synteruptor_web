@@ -1082,7 +1082,6 @@ function break_info(info, num) {
 	if (info.nCDS > 0) {
 		// Add GC content stats
 		var $gc_line = $("<li />");
-		console.log(info);
 		var gc = 'GC content diff: ' + (info.delta_GC > 0 ? "+" : '') + (info.delta_GC * 100).toFixed(1) + "%";
 		$gc_line.append(gc);
 		$ul.append( $gc_line );
@@ -1122,7 +1121,6 @@ $(function() {
 			// Create the page with the data
 			} else {
 				cached_data = data;
-				console.log(data);
 				$("#data_content").show();
 				text_stats(data);
 				display_all(data);
@@ -1134,7 +1132,6 @@ $(function() {
 			loading_off();
 		}).fail(function() {
 			$( "#message" ).text("Error: data retrieval failed");
-			console.log(urls.get_data + '?' + $.param(pars));
 			loading_off();
 		});
 	}
@@ -1179,7 +1176,6 @@ function change_break( breakid, new_window ) {
 	var url_pars = get_url_parameters();
 	url_pars.breakid = breakid;
 	var new_url = format_url(urls.current, url_pars);
-	console.log("Changing to break " + breakid + " : " + new_url);
 	if (new_window ) {
 		window.open( new_url );
 	} else {

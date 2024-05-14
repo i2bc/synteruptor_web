@@ -29,7 +29,7 @@ print_header("upload");
 <div id="content">
 <div class="centered_box">
 <h2><?php site_name(); ?> database upload</h2>
-<p>This page helps to upload <?php site_name(); ?> database (in sqlite3 format) to this website.</p>
+<p>Use this page to upload a <?php site_name(); ?> database (in sqlite3 format) to this website.</p>
 <?php
 
 if (isset($_GET["id"])) {
@@ -61,7 +61,7 @@ if (isset($_GET["id"])) {
 		if(!in_array($new_db, $_SESSION["db_ids"])){$_SESSION["db_ids"][]=$new_db;}
 	} else {
 		echo '<form id="uploader" action="upload_db_add.php?id=' . $id . '" method="post" enctype="multipart/form-data">';
-		echo " <input type='file' name='new_db' />";
+		echo "<input type='file' name='new_db' />";
 		echo '<input type="submit" value="Send" /></li>';
 	}
 	echo "</div>";

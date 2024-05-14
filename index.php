@@ -62,7 +62,7 @@ require_once('common.php');
 			<?php
 				// Display public databases (if any)
 				echo "<h3 id='availdb'>Available databases</h3>";
-				$allowed = get_available_dbs_list();
+				$allowed = get_available_dbs_list("dbs");
 				if ($allowed) {
 					echo "<p>The following databases were generated with preselected genomes and can be freely explored:</p>";
 					echo "<div id='databases'></div>";

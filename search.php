@@ -42,15 +42,17 @@
 							if (!check_id($id)) {
 								echo "Invalid id ($id)<br>";
 								echo '<a href="search_search.php">Start a new search</a>';
+								if(in_array($id,$_SESSION["blast_ids"])){unset($_SESSION["blast_ids"][array_search($id,$_SESSION["blast_ids"])]);};
 								exit;
 							} else {
 								echo "<p id='results'>Waiting...</p>";
+								if(!in_array($id,$_SESSION["blast_ids"])){$_SESSION["blast_ids"][]=$id;};
 							}
 						} else {
 							# Form
 							echo '<form name="seqform" id ="blast_form" method="post">';
 							echo '<label>Choose the database to search:</label>' . print_select("db", list_dbs($_SESSION['db_ids'])) . ' <a id="summary"></a><br>';
-							echo "<p>Paste your sequence in the text area (fasta format):</p>";
+							echo "<p>Paste your (protein) sequence in the text area (fasta format):</p>";
 							echo '<textarea name="seq" cols=80 rows=10 value="" id="seq"></textarea>';
 							echo '<br><input id="submitter" type="submit"></input><button type="button" id="clear">Clear</button>';
 							echo '</form>';
@@ -63,29 +65,6 @@
 			</div>
 			<div id="results_table" />
 			<div id="tail" />
-			<!-- <div class="centered_box">
-				<h2>Previous searches</h2>
-                <div class='index_box'>
-                <?php
-					// $available_dbs = get_available_dbs_list(true, $_SESSION['db_ids']);
-					// foreach ($_SESSION['db_ids'] as $key => $value){
-					// 	if(!in_array($value.".sqlite",$available_dbs)){
-					// 		unset($_SESSION['db_ids'][$key]);
-					// 	}
-					// }
-					// if (empty($_SESSION['db_ids'])){
-					// 	echo "<p>No user databases found in web browser history</p>";
-					// }else{
-					// 	echo "<p>The following databases were generated:</p>";
-					// 	foreach ($_SESSION['db_ids'] as &$value){
-					// 		$site_host = get_setting('site_host');
-					// 		$site_host_subdir = get_setting('site_host_subdir');
-					// 		echo "<p><a href='$site_host/$site_host_subdir/summary.php?version=$value'>$value</a></p>";
-					// 	}
-					// }
-                ?>
-                </div>
-			</div> -->
 		</div>
 	</body>
 </html>

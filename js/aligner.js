@@ -73,7 +73,6 @@ function get_max(genes) {
 }
 
 function draw_alignment(data) {
-	console.log(data);
 	// Number of sequences in the alignment
 	var num = Object.keys(data.genomes).length;
 	
@@ -479,7 +478,6 @@ $(function() {
 			loading_off();
 		}).fail(function() {
 			$( "#message" ).html("<span>Error: data retrieval failed.</span>");
-			console.log(urls.get_data + '?' + $.param(pars));
 			loading_off();
 		});
 	}

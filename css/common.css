@@ -165,11 +165,12 @@ a.table-row {
 }
 
 @media screen and (max-width: 800px) {
-	#databases {
+	#databases,#userdatabases {
 		width: 100%;
 		overflow-x: auto;
 	}
 }
+
 
 /*
 #databases table {
@@ -182,7 +183,7 @@ a.table-row {
 }
 */
 
-#databases td {
+#databases,#userdatabases td {
 	padding: 6px;
 }
 

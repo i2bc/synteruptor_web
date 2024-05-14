@@ -12,7 +12,6 @@ function update_table(data) {
 	if (data['outcome'] && data['outcome'] == false) {
 		$('#message').text('List query error.');
 	} else {
-		console.log(data);
 		var $table = $('#list');
 		
 		if (!data || !data.genes || data.genes.length == 0) {
@@ -139,13 +138,11 @@ function update_table(data) {
 }
 
 function update() {
-	console.log("UPDATE");
 	$('#list').empty();
 	var pars = get_pars();
 	
 	// Cached?
 	if (cached_data[ pars.sp ]) {
-		console.log("Retrieve cached data.");
 		update_page( cached_data[ pars.sp ] );
 	} else {
 		var rankpars = {
@@ -155,9 +152,7 @@ function update() {
 			"version": get_par( "version" ),
 			"type": "genes_list",
 		};
-		console.log(rankpars);
 		// Retrieve all data between the genomes
-		console.log("Download data.");
 		loading_on();
 		$.getJSON( urls.get_data, rankpars, function(data) {
 			var predata = preprocess_data(data);
@@ -202,7 +197,6 @@ function preprocess_data(data) {
 
 function create_menus(data) {
 	genomes = data.genomes;
-	console.log(genomes);
 	var sp = get_par( "sp" );
 	
 	// Init menu
@@ -288,7 +282,6 @@ function jump_to() {
 	// Move the focus in the center of the page, not at the top or wheresnot
 	var pid = get_par( "pid" );
 	if (pid && !jumped) {
-		console.log("Scroll!" + pid);
 		var o = $("#" + pid).focus().offset().top;
 		var $w = $(window);
 		var diff = ($w.height() / 2);
@@ -303,7 +296,6 @@ $(function() {
 	// Init the parameters
 	pars = get_url_parameters();
 	set_pars( pars );
-	console.log( get_pars() );
 	
 	// Get all the genomes names for the menu
 	pars.type = 'genomes';

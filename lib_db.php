@@ -30,7 +30,12 @@ function die_msg($message = '', $details = '') {
 }
 
 // Get available databases
-function get_available_dbs_list( $all = true , $authorised = array()) {
+function get_available_dbs_list( $show = "dbs" , $userauthorised = NULL) {
+	// show = "all" : list all dbs and userdbs, "dbs" : list all dbs only, "user" : list only user dbs
+	// authorised = array, all mgnXXXXXXX.sqlite that are allowed to be displayed
+	if (!in_array($show,array('all','dbs','user'))){
+		$show = 'all'; // defaults at "all" if unknown parameter value 
+	}
 	global $dbdir;
 	$files = scandir($dbdir);
 	$hfiles = array();
@@ -39,15 +44,28 @@ function get_available_dbs_list( $all = true , $authorised = array()) {
 	}
 	// remove dirs
 	for ($i = 0 ; $i < count($files); $i++) {
-		if ($files[$i] == '.'
-			or $files[$i] == '..'
-			or substr($files[$i], -7) != '.sqlite'
-			or (!$all and substr($files[$i], 0, 3) == 'mgn')
-		) {
+		if ($files[$i] == '.' 
+			or $files[$i] == '..' 
+			or substr($files[$i], -7) != '.sqlite') {
 			continue;
 		}
-if (!empty($authorised) and substr($files[$i], 0, 3) == 'mgn' and !in_array(substr($files[$i], 0, 9),$authorised)){
-			continue;
+		if ($show == "all"){
+			if (!is_null($userauthorised) 
+				and substr($files[$i], 0, 3) == 'mgn' 
+				and !in_array(substr($files[$i], 0, 9),$userauthorised)){
+				continue;
+			}
+		}elseif ($show == "dbs"){
+			if (substr($files[$i], 0, 3) == 'mgn'){
+				continue;
+			}
+		}else{ // $show == "user"
+			if (substr($files[$i], 0, 3) != 'mgn'){
+				continue;
+			}elseif (!is_null($userauthorised) 
+				and !in_array(substr($files[$i], 0, 9),$userauthorised)){
+				continue;
+			}
 		}
 		$hfiles[] = $files[$i];
 	}
@@ -56,15 +74,15 @@ if (!empty($authorised) and substr($files[$i], 0, 3) == 'mgn' and !in_array(subs
 
 // Connects to the db and returns the database handler
 function get_db($version = null) {
-	$allowed = get_available_dbs_list();
+	
 	if (!isset($version)) {
 		if ( isset($_GET['version'])) {
 			$version = $_GET['version'] . ".sqlite";
 		} else {
-			$version = $allowed[0];
+			$version = get_available_dbs_list("dbs")[0];
 		}
 	}
-	if (in_array($version, $allowed)) {
+	if (in_array($version, get_available_dbs_list("all"))) {
 		return get_db_connection($version);
 	} else {
 		die_msg('Invalid database name: ' . $version, 'Undefined database name: there is no file with this name');
@@ -75,12 +93,13 @@ function get_db_connection($db) {
 	global $dbdir;
 	$dbh;
 	$dbpath = $db;
-	if (!str_starts_with($db, "/")) {
+	if (substr($db, 0, 1) != "/") {
 		$dbpath = "$dbdir/$dbpath";
-		if (! preg_match("/\.sqlite$/i", $dbpath)) {
-			$dbpath = "$dbpath.sqlite";
-		}
 	}
+	if (! preg_match("/\.sqlite$/i", $dbpath)) {
+		$dbpath = "$dbpath.sqlite";
+	}
+	
 	error_log("Get db connection to $dbpath");
 	try {
 		$dbh = new PDO("sqlite:$dbpath", '', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -100,7 +119,7 @@ function check_db($dbh) {
 		$query = "SELECT * FROM $table LIMIT 1";
 		$data = get_db_data($dbh, $query);
 		if (count($data) != 1) {
-			error_log("Table $table has not data?");
+			error_log("Table $table has no data?");
 			return false;
 		}
 	}
@@ -163,8 +182,9 @@ function has_table($dbh, $table) {
 
 /*********************************************************/
 // Retrieve the list of available databases
-function get_databases_data($all = false, $authorised = array()) {
-	$dbs = get_available_dbs_list( $all, $authorised );
+function get_databases_data($show = 'dbs', $userauthorised = NULL) {
+	
+	$dbs = get_available_dbs_list( $show, $userauthorised );
 	$data = array();
 	foreach ($dbs as $db) {
 		$dbh = get_db($db);
@@ -500,7 +520,7 @@ function get_ranking_data($dbh) {
 	$joins .= 'LEFT JOIN genes gright2 ON (pnum_all_right2 = gright2.pnum_all and breaks_all.sp2 = gright2.sp) ';
 	$query = "$select $from $joins WHERE $condition $order $limit";
 	return get_db_data($dbh, $query, $vals);
-	return $query;
+	// return $query;
 }
 
 /************************************************************

@@ -35,7 +35,7 @@ require_once('common.php');
 		
 		<div class='index_box'>
 			<?php
-				$allowed = get_available_dbs_list(true, $_SESSION['db_ids']);
+				$allowed = get_available_dbs_list("all", $_SESSION['db_ids']);
 				if ($allowed) {
 					echo "<p>Select a public database:";
 					echo "<div id='databases'></div>";

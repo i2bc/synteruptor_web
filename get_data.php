@@ -151,8 +151,8 @@ function get_genes_list($dbh) {
 	}
 }
 
-function get_databases($all = false, $authorised = array()) {
-	$data = get_databases_data($all, $authorised);
+function get_databases($show = 'dbs', $userauthorised = array()) {
+	$data = get_databases_data($show, $userauthorised);
 	return $data;
 }
 
@@ -174,14 +174,20 @@ $functions = array(
 // MAIN
 // Special: list of all databases 
 if (isset($_GET['type']) && $_GET['type'] == 'databases') {
-	$all = false;
-	$authorised = array();
+	$show = 'dbs';
+	$userauthorised = array();
 	if (isset($_GET['userdb']) && $_GET['userdb']=='true'){
-		$all = true;
-		$authorised = $_SESSION['db_ids'];
+		$userauthorised = $_SESSION['db_ids'];
+		$show = 'all';
 	}
-	$data = get_databases($all, $authorised);
+	$data = get_databases($show, $userauthorised);
 	print json_encode($data);
+} elseif (isset($_GET['type']) && $_GET['type'] == 'userdatabases'){
+	$show = "user";
+	$userauthorised = $_SESSION['db_ids'];
+	$data = get_databases($show, $userauthorised);
+	print json_encode($data);
+	
 } else {
 	$dbh = get_db();
 

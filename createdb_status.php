@@ -37,41 +37,41 @@ function check_blocks_tol($btol) {
 
 function start_job() {
 	$config = get_config();
-
+	
 	# Change from "preparation" to "waiting"
 	if (isset($config) && isset($config['status']) && $config["status"] == 'preparation') {
 		$config["status"] = "waiting";
 		# Get a mail address too?
 		if (isset($_GET["mail"])) {
 			$mail = check_mail($_GET["mail"]);
-			if ($mail == '') {
-				return array(
-					'status' => "mail_error",
-				);
-			} else {
+			if ($mail != '') {
 				$config["mail"] = $mail;
+			// } else { // [CQ] 2024-03-22 -> remove this check to avoid error if mail not set
+			// 	return array(
+			// 		'status' => "mail_error",
+			// 	);
 			}
 		}
 		# Get an author?
 		if (isset($_GET["author"])) {
 			$author = check_text($_GET["author"]);
-			if ($author == '') {
-				return array(
-					'status' => "author_error",
-				);
-			} else {
+			if ($author != '') {
 				$config["author"] = $author;
+			// } else {
+			// 	return array(
+			// 		'status' => "author_error",
+			// 	);
 			}
 		}
 		# Get a description?
 		if (isset($_GET["description"])) {
 			$description = check_text($_GET["description"]);
-			if ($description == '') {
-				return array(
-					'status' => "description_error",
-				);
-			} else {
+			if ($description != '') {
 				$config["description"] = $description;
+			// } else {
+			// 	return array(
+			// 		'status' => "description_error",
+			// 	);
 			}
 		}
 		# Get a blocks tolerance value?
@@ -84,7 +84,7 @@ function start_job() {
 	} else {
 		return array(
 			'status' => "error",
-			'details' => "Status already exists (" . $status['status'] . ")",
+			'details' => "Status already exists (" . $config['status'] . ")",
 		);
 	}
 }
@@ -99,7 +99,6 @@ if (!check_id($id)) {
 	);
 } else if (isset($_GET["command"])) {
 	$command = $_GET["command"];
-
 	# Check for the status of the current working dir
 	if ($command == "check") {
 		$output = get_config();

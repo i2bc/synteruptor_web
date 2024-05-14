@@ -25,8 +25,8 @@ require_once('common.php');
 			<div class='box'>
 				Downloads:<br />
 				<ul>
-				<li><a href='dl/synteruptor.tar.gz'><?php echo $site_name ?> scripts</a></li>
-				<li><a href='dl/synteruptor_web.tar.gz'><?php echo $site_name ?> website</a></li>
+				<li><a href='https://github.com/i2bc/synteruptor'><?php echo $site_name ?> scripts</a></li>
+				<li><a href='https://github.com/i2bc/synteruptor_web'><?php echo $site_name ?> website</a></li>
 				</ul>
 			</div>
 			<a href="index.php">&lt; Back to Main Page</a>

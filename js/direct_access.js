@@ -3,7 +3,6 @@ init_pars( {
 });
 
 function create_menus(data) {
-                console.log(data);
                 var db = get_par( "db" );
                 // Init menu
                 var i = 0;

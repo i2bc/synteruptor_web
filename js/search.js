@@ -63,9 +63,7 @@ $(function() {
 				'db': database,
 				'seq': $("#seq").val()
 			};
-			console.log(data);
 			var start_url = format_url( urls.start_search, { 'version': database } );
-			console.log(start_url);
 			$.post( start_url, data, function(ans) {
 				if (ans.status == 'success' && ans.id) {
 					var pars = {
@@ -73,7 +71,6 @@ $(function() {
 						'version': database
 					};
 					var new_url = format_url( urls.search, pars );
-					console.log( new_url );
 					window.location = new_url;
 				} else {
 					console.log( Sent );

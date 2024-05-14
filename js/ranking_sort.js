@@ -138,7 +138,6 @@ function get_custom_sort_vals() {
 	var sort;
 	if ( storage.isSet( store_name )) {
 		sort = storage.get( store_name );
-		console.log("Custom stored");
 	}
 	if (sort == null || Object.keys(sort).length == 0) {
 		console.log("Error, back to default");
@@ -158,7 +157,6 @@ function set_custom_sort_vals() {
 	});
 	
 	if (Object.keys(sort).length > 0) {
-		console.log("Custom saved in " + store_name);
 		sort_vals = sort;
 		storage.set( store_name, sort );
 	}
@@ -167,7 +165,6 @@ function set_custom_sort_vals() {
 function set_default_sort_vals() {
 	sort_vals = default_sort_vals;
 	storage.set( store_name, sort_vals );
-	console.log("Back to default sort");
 	build_sort_table();
 }
 

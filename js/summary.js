@@ -232,7 +232,6 @@ $(function() {
 	// Init the parameters
 	pars = get_url_parameters();
 	set_pars( pars );
-	console.log( get_pars() );
 	if (get_par("version") && get_par("version") != "") {
 		create_table(pars);
 	} else {
