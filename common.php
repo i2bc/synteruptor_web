@@ -11,6 +11,12 @@ ini_set('log_errors', 'On');
 ini_set('display_errors', 'Off');
 // ini_set('error_log','../migenis.log');
 
+function console_log($output) {
+	echo '<script>';
+	echo 'console.log(' . json_encode($output) . ');';
+	echo '</script>';
+}
+
 function get_setting($key) {
 	global $settings;
 	if (isset($settings[ $key ])) {

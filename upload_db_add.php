@@ -36,16 +36,6 @@ if (!isset($_FILES["new_db"])) {
 			$errormsg .= "<li>File is empty</li>";
 			$nerrors++;
 		} else {
-			# Check there is data in the database
-			try {
-				$dbh = get_db_connection($tmp_name);
-				if (!check_db($dbh)) {
-					throw new DbException("Content of the db doesn't look right");
-				}
-			} catch(Exception $e) {
-				$errormsg .= "<li>Exception: ".$e->getMessage()."</li>";
-				$nerrors++;
-			}
 
 			if ($nerrors == 0) {
 				# Just in case, to avoid collisions
@@ -63,14 +53,33 @@ if (!isset($_FILES["new_db"])) {
 					}
 				}
 				if ($nerrors == 0) {
-					if ( move_uploaded_file($tmp_name, $new_db_path) ) {
-						$uploaded_array[] .= "Uploaded file '".$name."'.<br/>\n";
-					} else {
+					if ( !move_uploaded_file($tmp_name, $new_db_path) ) {
 						$errormsg .= "<li>Could not move uploaded file '".$tmp_name."' to '".$name."'<li>";
 						$nerrors++;
 					}
 				}
+				if ($nerrors == 0) {
+					# Check there is data in the database
+					try {
+						$dbh = get_db_connection($new_db_path);
+						if (!check_db($dbh)) {
+							throw new DbException("Content of the db doesn't look right");
+							if (!unlink($new_db_path)) {
+								// Error occurred while deleting the file
+								$errormsg .= "<li>Could not remove the uploaded file from db<li>";
+								$nerrors++;
+							}
+							
+						}
+					} catch(Exception $e) {
+						$errormsg .= "<li>Exception: ".$e->getMessage()."</li>";
+						$nerrors++;
+					}
+					$uploaded_array[] .= "Uploaded file '".$name."'.<br/>\n";
+				}
 			}
+
+
 		}
 	}
 }

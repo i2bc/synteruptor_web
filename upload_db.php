@@ -60,7 +60,7 @@ if (isset($_GET["id"])) {
 		echo "Uploaded the database file to <a href=\"summary.php?version=$new_db\">$new_db</a>";
 	} else {
 		echo '<form id="uploader" action="upload_db_add.php?id=' . $id . '" method="post" enctype="multipart/form-data">';
-		echo " <input type='file' name='new_db' />";
+		echo "<input type='file' name='new_db' />";
 		echo '<input type="submit" value="Send" /></li>';
 	}
 	echo "</div>";

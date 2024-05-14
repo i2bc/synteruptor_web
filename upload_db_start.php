@@ -12,6 +12,7 @@ function temp_file() {
 	
 	$tempfile = tempnam($basedir, 'mgn');
 	$id = basename($tempfile);
+	chmod($tempfile, 0777);
 	if(!in_array($id,$_SESSION["db_ids"])){$_SESSION["db_ids"][]=$id;}
 	return $id;
 }

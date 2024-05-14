@@ -93,12 +93,13 @@ function get_db_connection($db) {
 	global $dbdir;
 	$dbh;
 	$dbpath = $db;
-	if (!str_starts_with($db, "/")) {
+	if (substr($db, 0, 1) != "/") {
 		$dbpath = "$dbdir/$dbpath";
-		if (! preg_match("/\.sqlite$/i", $dbpath)) {
-			$dbpath = "$dbpath.sqlite";
-		}
 	}
+	if (! preg_match("/\.sqlite$/i", $dbpath)) {
+		$dbpath = "$dbpath.sqlite";
+	}
+	
 	error_log("Get db connection to $dbpath");
 	try {
 		$dbh = new PDO("sqlite:$dbpath", '', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
